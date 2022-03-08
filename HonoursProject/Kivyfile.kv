@@ -1,0 +1,341 @@
+WindowManager:
+    MainWindow:
+    SecondWindow:
+    ThirdWindow:
+    ForthWindow:
+<MainWindow>:
+    
+    name:"Login"
+
+    GridLayout:
+        cols:1
+
+        GridLayout:
+            cols:2
+
+            Label:
+                text: "Username"
+            
+            TextInput:
+                id: usern 
+                multiline: False
+                
+
+            Label:
+                text: "Password"
+
+            TextInput:
+                id: passw
+                multiline: False
+                password: True
+            
+            
+
+        Button:
+            text: "Submit"
+            on_release:
+                app.root.current = "second" if  passw.text == "jack" and usern.text == "gibb" else root.show_error()
+
+    
+    
+        
+<SecondWindow>:
+
+    name: "second"
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    GridLayout:
+        cols:1
+        size: root.width  , root.height 
+        padding: 100
+        
+
+    
+
+        GridLayout:
+            cols:2
+            
+            
+            Button:
+                id: total_display
+                text: str(root.coin123)
+                background_color: (0.0,0.0,0.0,1.0)
+                
+            Button:
+                text: "Load Graph"  
+                background_color: (0.0,0.0,0.0,1.0)
+                on_press: root.load_chart()
+                
+                    
+                
+            Button:
+                text: "Update Total"
+                background_color: (0.0,0.0,0.0,1.0)
+                on_press: root.updateVal()
+
+            Button:
+                text:"More Detail"
+                background_color: (0.0,0.0,0.0,1.0)
+                on_press: app.root.current = "third"
+        
+
+<ThirdWindow>:
+    name:"third"
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    GridLayout:
+        cols:1
+        size: root.width  , root.height 
+        padding: 100
+        
+
+    
+
+        GridLayout:
+            cols:2
+            
+            
+            Button:
+                id: total_display
+                background_color: (0.0,0.0,0.0,1.0)
+                text: "Candle Chart"
+                
+            Button:
+                background_color: (0.0,0.0,0.0,1.0)
+                text: "Price Prediction" 
+
+                  
+                
+            Button:
+                text: "Update Coins"
+                background_color: (0.0,0.0,0.0,1.0)
+                on_release: root.show_popup2()
+                
+
+            Button:
+                text:"Coin Breakdown"
+                background_color: (0.0,0.0,0.0,1.0)
+                on_release: root.show_popup() 
+            
+            Button:
+                text: "4th window"
+                background_color: (0.0,0.0,0.0,1.0)
+                on_release: app.root.current ="fourth"
+
+                
+
+            Button:
+                text:"Back"
+                background_color: (0.0,0.0,0.0,1.0)
+                on_release: app.root.current = "second"
+                
+
+<ForthWindow>:
+    name:"fourth"
+
+
+
+    GridLayout:
+        cols:1
+        
+        
+        
+
+    
+
+
+        GridLayout:
+            
+            cols:4
+            rows:2
+            
+
+            RelativeLayout:
+                canvas:
+                    Color:
+                        rgb: 0, 0, 0
+                    Rectangle:
+                        size: root.width, root.height
+                ToggleButton:
+                    size_hint: None, None
+                    size: 0.25 * root.width, 0.25 * root.height
+                    pos: 0.00 * root.width, 0.00 * root.height
+                    text: 'Week'
+                    group: 'geometry'
+                    on_press: root.load_historical_week(CryptoInput.text)
+
+        
+        # Create Toggle button 2
+            RelativeLayout:
+                canvas:
+                    Color:
+                        rgb: 0, 0, 0
+                    Rectangle:
+                        size: root.width, root.height
+                ToggleButton:
+                    size_hint: None, None
+                    size: 0.25 * root.width, 0.25 * root.height
+                    pos: 0.00 * root.width, 0.00 * root.height
+                    text: 'Month'
+                    group: 'geometry'
+                    on_press: root.load_historical_month(CryptoInput.text)
+            
+
+            RelativeLayout:
+                canvas:
+                    Color:
+                        rgb: 0, 0, 0
+                    Rectangle:
+                        size: root.width, root.height
+                ToggleButton:
+                    size_hint: None, None
+                    size: 0.25 * root.width, 0.25 * root.height
+                    pos: 0.00 * root.width, 0.00 * root.height
+                    
+                    text: 'Year'
+                    group: 'geometry'
+                    on_press: root.load_historical_year(CryptoInput.text) 
+
+            
+        
+            RelativeLayout:
+                canvas:
+                    Color:
+                        rgb: 0, 0, 0
+                    Rectangle:
+                        size: root.width, root.height
+                ToggleButton:
+                    id: btnb
+                    size_hint: None, None
+                    size: 0.25 * root.width, 0.25 * root.height
+                    pos: 0.00 * root.width, 0.00 * root.height
+                    text: 'Current Value' 
+                    group: 'geometry'
+                    on_press: root.searchButton1(CryptoInput.text)
+            
+
+        RelativeLayout:
+            Label:
+                text: "Password"
+
+            TextInput:
+                id: CryptoInput
+                multiline: False
+        RelativeLayout:
+            Button:
+                text: "Update"
+                on_release:
+                    root.apiCall1(CryptoInput.text)
+        RelativeLayout:
+            Button:
+                text: "Back"
+                on_release:
+                    app.root.current = "third" 
+
+
+            
+            
+<Table>:
+    name: "table"
+    orientation: 'horizontal'
+    spacing: 40
+    spalte1_SP: 'spalte1'
+    spalte2_SP: 'spalte2'
+    spalte3_SP: 'spalte3'
+    
+    Label:
+        id: SP1
+        text: root.spalte1_SP
+    Label:
+        id: SP2
+        text: root.spalte2_SP
+    Label:
+        id: SP3
+        text: root.spalte3_SP    
+  
+
+<RV>:
+
+            
+            
+           
+<FifthWindow>:
+
+    name: "fifth"
+    orientation: "vertical"
+    on_pre_enter: self.refresh_RV()
+    BoxLayout: 
+        RecycleView:
+            id: rv_id
+            data: root.getItems()
+            viewclass: 'Table'   
+            RecycleBoxLayout:
+                default_size: None, dp(20)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height 
+                orientation: 'vertical'
+            
+
+                    
+          
+
+    
+
+<P>:
+
+
+    GridLayout:
+        cols:1
+    
+    
+
+        GridLayout:
+            cols:2
+
+            Label:
+                text: "Coin you want to update" 
+
+            TextInput:
+                id: coinid
+                multiline: False
+            
+            Label:
+                text: "Your total amount"
+            
+            TextInput:
+                id: amountid 
+                multiline: False
+        
+        Button:
+            text: "add"
+            on_release:
+                root.add(coinid,amountid)
+        Button:
+            text: "remove"
+            on_release:
+                root.remove(coinid,amountid)
+
+
+            
+            
+
+
+
+            
+
+
+
+
+
+
