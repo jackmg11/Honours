@@ -61,21 +61,28 @@ class SecondWindow(Screen):
        
 
 class P(Screen):
-    def add(self,k,v): 
-        coin.updateCoins1(k.text,float(v.text),"add")
-        print(k,v)
-        coin.process()
-        coin.saveCoins()
-        coin.loadLocalData()
-        
+    def add(self,k,v):
+        if coin.exists(k.text):
+            coin.updateCoins1(k.text,float(v.text),"add")
+            print(k,v)
+            coin.process()
+            coin.saveCoins()
+            coin.loadLocalData()
+        else:
+            print("doesnt exist")
+            
         
         
     def remove(self,k,v):
-        coin.updateCoins1(k.text,float(v.text),"remove")
-        print(k,v)
-        coin.process()
-        coin.saveCoins()
-        coin.loadLocalData
+        if coin.exists(k.text):
+            coin.updateCoins1(k.text,float(v.text),"remove")
+            print(k,v)
+            coin.process()
+            coin.saveCoins()
+            coin.loadLocalData
+        else:
+            print("doesnt exist")
+            
         
         
         

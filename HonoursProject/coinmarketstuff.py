@@ -86,15 +86,19 @@ class Coin:
     
     self.nameList = []
     self.globalNameList = []
+    self.symbolNameConverter = {}
     for k in self.coins.keys():
 
       self.nameList.append(k)  
-    c = []
+    
     cleandata = []
     for i in a:
-      self.globalNameList.append(i["name"])
+      self.globalNameList.append(i["name"].lower())
+      self.symbolNameConverter[i["symbol"].lower()] = i["name"]
       if i["name"] in self.nameList:
           cleandata.append(i)
+  
+    
 
     
           
@@ -141,7 +145,14 @@ class Coin:
     
 
 
-
+  def exists(self,k):
+    if k.lower() in self.symbolNameConverter:
+      k = self.symbolNameConverter[k.lower()]
+    if k.lower() in self.globalNameList:
+      return True
+    else:
+      return False
+    
  
   def graph(self):
 
@@ -171,28 +182,23 @@ class Coin:
 
     plt.show()
 
-  def updateCoins(self,k,v):
-    if k in self.globalNameList:
-      self.coins[k]=v
-    else:
-      print("Please enter correct name")
-      return False
+  
     
   def updateCoins1(self,k,v,addremove):
-    if k in self.globalNameList:
-      if addremove == "remove":
-        self.coins[k] = self.coins[k] - v
-        self.saveCoins()
-        self.process()
-        self.loadLocalData()
-      elif addremove == "add":
-        self.coins[k] = self.coins[k] + v
-        self.saveCoins()
-        self.process()
-        self.loadLocalData()
-    else:
-      print("Please enter correct name")
-      return False
+    if k.lower() in self.symbolNameConverter:
+      k = self.symbolNameConverter[k.lower()]
+    k = k.lower().capitalize()
+    if addremove == "remove":
+      self.coins[k] = self.coins[k] - v
+      self.saveCoins()
+      self.process()
+      self.loadLocalData()
+    elif addremove == "add":
+      self.coins[k] = self.coins[k] + v
+      self.saveCoins()
+      self.process()
+      self.loadLocalData()
+    
 
 
 

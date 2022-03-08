@@ -37,16 +37,16 @@ def loadData(file):
 #takes days and coin and returns graph of both
 def showGraph(days,coin): 
     data = loadData(f"ApiCryptoData{coin.strip()}.csv")
-    data["RealTime"]=data["time"].apply(Time_converter)
+    data["Date"]=data["time"].apply(Time_converter)
    
    
     data1 = data.tail(days)
-    graph = data1[[("RealTime"),"high"]]
-    graph.plot()
+    graph = data1[[("Date"),"high"]]
+    graph.plot(x="Date")
   
     plt.locator_params(axis="x",nbins=4)
     plt.show()
-#showGraph(7,"ETH")
+
 
 
 
