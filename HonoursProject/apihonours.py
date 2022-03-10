@@ -61,5 +61,5 @@ def showGraph(days,coin):
     plt.figure(300)
     plt.locator_params(axis="x",nbins=4)
     plt.show()"""
-showGraph(7,"Bitcoin")
+
 #showGraph1(31,"eth")

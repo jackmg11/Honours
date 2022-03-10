@@ -20,7 +20,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.togglebutton import ToggleButton
 from apihonours import showGraph
 from apihonours import apiCall
-from CoinmarketAPI import search
+
 from APITESTER import apicall23
 from APITESTER import apicall_24_hour_percent
 
@@ -33,10 +33,12 @@ def getItems(coin):
 
 
 class MainWindow(Screen):
-    def show_error(self):
+    #Error message used on 3 pages 
+    @staticmethod
+    def show_error(message):
         
 
-        PopupWindow = Popup(title="Error",content=Label(text='Incorrect password'), size_hint=(None,None),size=(400,400))
+        PopupWindow = Popup(title="Error",content=Label(text=message), size_hint=(None,None),size=(400,400))
 
         PopupWindow.open()
         
@@ -47,20 +49,21 @@ class Table(BoxLayout):
     pass
 class SecondWindow(Screen):
     coin123 = NumericProperty(coin.myTotal)
-    
+    #loads graph of total coins in piechart
     def load_chart(self):
         coin.graph()
-    
+    #updates value of total coins owned
     def updateVal(self):
         coin.loadApiData()
 
-        ccc = str(coin.myTotal)
-        print(ccc)
+        coinTotal = str(coin.myTotal)
+        print(coinTotal)
 
-        self.ids.total_display.text = ccc
+        self.ids.total_display.text = coinTotal
        
 
-class P(Screen):
+class AddRemove(Screen):
+    #adds coins to coin total
     def add(self,k,v):
         if coin.exists(k.text):
             coin.updateCoins1(k.text,float(v.text),"add")
@@ -70,9 +73,12 @@ class P(Screen):
             coin.loadLocalData()
         else:
             print("doesnt exist")
+            MainWindow.show_error("Coin Doesnt Exists")
+            
             
         
-        
+    
+    #removes coin from coin total 
     def remove(self,k,v):
         if coin.exists(k.text):
             coin.updateCoins1(k.text,float(v.text),"remove")
@@ -81,6 +87,7 @@ class P(Screen):
             coin.saveCoins()
             coin.loadLocalData
         else:
+            MainWindow.show_error("Coin Doesnt Exists")
             print("doesnt exist")
             
         
@@ -90,7 +97,7 @@ class P(Screen):
 
 class ThirdWindow(Screen):
     def show_popup(self):
-        #show = ForthWindow()
+        
         show = Fifthwindow()
         popupWindow = Popup(title="Coins",content=show, size_hint=(None,None),size=(600,600))
         
@@ -103,13 +110,22 @@ class ThirdWindow(Screen):
 
         PopupWindow.open()
         #UPDATE
+        
+    def show_popup_candle(self):
+        show2 = P()
+
+        PopupWindow = Popup(title="Update Coin Total",content=show2, size_hint=(None,None),size=(400,400))
+
+        PopupWindow.open()
+        #UPDATE
     
         
     
  
 
 
-
+class CandlePop(Screen):
+    pass
     
 class ForthWindow(Screen):
     #Takes number of days and coin and loads graph based on input

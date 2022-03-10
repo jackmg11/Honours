@@ -34,7 +34,7 @@ WindowManager:
         Button:
             text: "Submit"
             on_release:
-                app.root.current = "second" if  passw.text == "jack" and usern.text == "gibb" else root.show_error()
+                app.root.current = "second" if  passw.text == "jack" and usern.text == "gibb" else root.show_error("Incorrect password")
 
     
     
@@ -109,6 +109,7 @@ WindowManager:
                 id: total_display
                 background_color: (0.0,0.0,0.0,1.0)
                 text: "Candle Chart"
+                on_release: root.show_popup2()
                 
             Button:
                 background_color: (0.0,0.0,0.0,1.0)
