@@ -20,6 +20,8 @@ from kivy.uix.popup import Popup
 from kivy.uix.togglebutton import ToggleButton
 from apihonours import showGraph
 from apihonours import apiCall
+from candleChart import candleChart
+from apihonours import showGraphVol
 
 from APITESTER import apicall23
 from APITESTER import apicall_24_hour_percent
@@ -65,8 +67,9 @@ class SecondWindow(Screen):
 class AddRemove(Screen):
     #adds coins to coin total
     def add(self,k,v):
-        if coin.exists(k.text):
-            coin.updateCoins1(k.text,float(v.text),"add")
+        k = k.text.strip()
+        if coin.exists(k):
+            coin.updateCoins1(k,float(v.text),"add")
             print(k,v)
             coin.process()
             coin.saveCoins()
@@ -80,8 +83,9 @@ class AddRemove(Screen):
     
     #removes coin from coin total 
     def remove(self,k,v):
-        if coin.exists(k.text):
-            coin.updateCoins1(k.text,float(v.text),"remove")
+        k = k.text.strip()
+        if coin.exists(k):
+            coin.updateCoins1(k,float(v.text),"remove")
             print(k,v)
             coin.process()
             coin.saveCoins()
@@ -104,7 +108,7 @@ class ThirdWindow(Screen):
         popupWindow.open()
     
     def show_popup2(self):
-        show2 = P()
+        show2 = AddRemove()
 
         PopupWindow = Popup(title="Update Coin Total",content=show2, size_hint=(None,None),size=(400,400))
 
@@ -112,9 +116,9 @@ class ThirdWindow(Screen):
         #UPDATE
         
     def show_popup_candle(self):
-        show2 = P()
+        show2 = CandlePop()
 
-        PopupWindow = Popup(title="Update Coin Total",content=show2, size_hint=(None,None),size=(400,400))
+        PopupWindow = Popup(title="Candle Chart",content=show2, size_hint=(None,None),size=(400,400))
 
         PopupWindow.open()
         #UPDATE
@@ -125,7 +129,11 @@ class ThirdWindow(Screen):
 
 
 class CandlePop(Screen):
-    pass
+    def candleChart1(self,coin):
+        
+        candleChart(coin.text)
+        showGraphVol(coin.text)
+        
     
 class ForthWindow(Screen):
     #Takes number of days and coin and loads graph based on input

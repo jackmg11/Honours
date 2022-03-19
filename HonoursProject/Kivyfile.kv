@@ -109,7 +109,7 @@ WindowManager:
                 id: total_display
                 background_color: (0.0,0.0,0.0,1.0)
                 text: "Candle Chart"
-                on_release: root.show_popup2()
+                on_release: root.show_popup_candle()
                 
             Button:
                 background_color: (0.0,0.0,0.0,1.0)
@@ -290,10 +290,30 @@ WindowManager:
 
                     
           
-
+<CandlePop>:
+    GridLayout:
+        cols:1
+    
     
 
-<P>:
+        GridLayout:
+            cols:2
+
+            Label:
+                text: "Coin" 
+
+            TextInput:
+                id: coinid
+                multiline: False
+            
+        
+        Button:
+            text: "Load"
+            on_release:
+                root.candleChart1(coinid)
+    
+
+<AddRemove>:
 
 
     GridLayout:

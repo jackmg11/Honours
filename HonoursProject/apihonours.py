@@ -47,6 +47,17 @@ def showGraph(days,coin):
     plt.locator_params(axis="x",nbins=4)
     plt.show()
 
+def showGraphVol(coin): 
+    data = loadData(f"ApiCryptoData{coin.strip()}.csv")
+    data["Date"]=data["time"].apply(Time_converter)
+   
+   
+    data1 = data.tail(2000)
+    graph = data1[[("Date"),"volumeto"]]
+    graph.plot(x="Date")
+  
+    plt.locator_params(axis="x",nbins=4)
+    plt.show()
 
 
 
@@ -62,4 +73,4 @@ def showGraph(days,coin):
     plt.locator_params(axis="x",nbins=4)
     plt.show()"""
 
-#showGraph1(31,"eth")
+#showGraph1("eth")

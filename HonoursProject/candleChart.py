@@ -14,4 +14,4 @@ def candleChart(coin):
                     close=df['close'])])
 
     fig1.show()
-candleChart("BTC")
+
