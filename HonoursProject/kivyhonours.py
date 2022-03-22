@@ -20,7 +20,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.togglebutton import ToggleButton
 from apihonours import showGraph
 from apihonours import apiCall
-from candleChart import candleChart
+from apihonours import candleChart
 from apihonours import showGraphVol
 
 from APITESTER import apicall23
@@ -130,9 +130,10 @@ class ThirdWindow(Screen):
 
 class CandlePop(Screen):
     def candleChart1(self,coin):
+        coinNoSpace = coin.text.replace(" ","")
         
-        candleChart(coin.text)
-        showGraphVol(coin.text)
+        candleChart(coinNoSpace)
+        showGraphVol(coinNoSpace)
         
     
 class ForthWindow(Screen):
