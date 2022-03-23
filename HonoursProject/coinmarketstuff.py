@@ -194,11 +194,13 @@ class Coin:
       self.process()
       self.loadLocalData()
     elif addremove == "add":
-      self.coins[k] = self.coins[k] + v
-      self.saveCoins()
-      self.process()
-      self.loadLocalData()
-    
+      if k in self.coins:
+        self.coins[k] = self.coins[k] + v
+        self.saveCoins()
+        self.process()
+        self.loadLocalData()
+      else:
+        self.coins[k] = v
 
 
 
@@ -229,6 +231,7 @@ if __name__=="__main__":
   #ccc.updateCoins("Bitoin",0.01863129)
   
   ccc.saveCoins()
-
+  #print(ccc.coins)
+  ccc.updateCoins1("Eth",20,"add")
 
 

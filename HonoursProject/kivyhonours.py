@@ -1,3 +1,4 @@
+from tkinter import E
 from matplotlib.pyplot import show
 from coinmarketstuff import Coin
 import kivy
@@ -67,32 +68,38 @@ class SecondWindow(Screen):
 class AddRemove(Screen):
     #adds coins to coin total
     def add(self,k,v):
-        k = k.text.strip()
-        if coin.exists(k):
-            coin.updateCoins1(k,float(v.text),"add")
-            print(k,v)
-            coin.process()
-            coin.saveCoins()
-            coin.loadLocalData()
-        else:
-            print("doesnt exist")
-            MainWindow.show_error("Coin Doesnt Exists")
-            
-            
+        try:
+            k = k.text.strip()
+            if coin.exists(k):
+                coin.updateCoins1(k,float(v.text),"add")
+                print(k,v)
+                coin.process()
+                coin.saveCoins()
+                coin.loadLocalData()
+            else:
+                print("doesnt exist")
+                MainWindow.show_error("Coin Doesnt Exists")
+        except:
+            MainWindow.show_error("Please Add coin amount")
+                
         
     
     #removes coin from coin total 
     def remove(self,k,v):
-        k = k.text.strip()
-        if coin.exists(k):
-            coin.updateCoins1(k,float(v.text),"remove")
-            print(k,v)
-            coin.process()
-            coin.saveCoins()
-            coin.loadLocalData
-        else:
-            MainWindow.show_error("Coin Doesnt Exists")
-            print("doesnt exist")
+        try:
+            
+            k = k.text.strip()
+            if coin.exists(k):
+                coin.updateCoins1(k,float(v.text),"remove")
+                print(k,v)
+                coin.process()
+                coin.saveCoins()
+                coin.loadLocalData
+            else:
+                MainWindow.show_error("Coin Doesnt Exists")
+                print("doesnt exist")
+        except:
+            MainWindow.show_error("Please Add coin amount")
             
         
         
@@ -130,6 +137,7 @@ class ThirdWindow(Screen):
 
 class CandlePop(Screen):
     def candleChart1(self,coin):
+        
         coinNoSpace = coin.text.replace(" ","")
         
         candleChart(coinNoSpace)
@@ -139,11 +147,21 @@ class CandlePop(Screen):
 class ForthWindow(Screen):
     #Takes number of days and coin and loads graph based on input
     def load_historical_week(self,coin):
-        showGraph(7,coin)
+        try:
+            showGraph(7,coin)
+        except FileNotFoundError:
+            MainWindow.show_error("File Not Found")
+            
     def load_historical_month(self,coin):
-        showGraph(31,coin)
+        try:
+            showGraph(31,coin)
+        except FileNotFoundError:
+            MainWindow.show_error("File Not Found")
     def load_historical_year(self,coin):
-        showGraph(365,coin)
+        try:
+            showGraph(365,coin)
+        except FileNotFoundError:
+            MainWindow.show_error("File Not Found")
         #### File Names ETH search Eth
     def apiCall1(self,coin):
         apiCall(coin)
