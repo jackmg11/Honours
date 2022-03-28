@@ -34,7 +34,7 @@ WindowManager:
         Button:
             text: "Submit"
             on_release:
-                app.root.current = "second" if  passw.text == "jack" and usern.text == "gibb" else root.show_error("Incorrect password")
+                app.root.current = "second" if  passw.text == "" and usern.text == "" else root.show_error("Incorrect password")
 
     
     
@@ -114,6 +114,7 @@ WindowManager:
             Button:
                 background_color: (0.0,0.0,0.0,1.0)
                 text: "Price Prediction" 
+                on_release: root.show_popup_pricepred()
 
                   
                 
@@ -173,7 +174,7 @@ WindowManager:
                     pos: 0.00 * root.width, 0.00 * root.height
                     text: 'Week'
                     group: 'geometry'
-                    on_press: root.load_historical_week(CryptoInput.text)
+                    on_release: root.load_historical_week(CryptoInput.text)
 
         
         # Create Toggle button 2
@@ -189,7 +190,7 @@ WindowManager:
                     pos: 0.00 * root.width, 0.00 * root.height
                     text: 'Month'
                     group: 'geometry'
-                    on_press: root.load_historical_month(CryptoInput.text)
+                    on_release: root.load_historical_month(CryptoInput.text)
             
 
             RelativeLayout:
@@ -205,7 +206,7 @@ WindowManager:
                     
                     text: 'Year'
                     group: 'geometry'
-                    on_press: root.load_historical_year(CryptoInput.text) 
+                    on_release: root.load_historical_year(CryptoInput.text) 
 
             
         
@@ -222,7 +223,7 @@ WindowManager:
                     pos: 0.00 * root.width, 0.00 * root.height
                     text: 'Current Value' 
                     group: 'geometry'
-                    on_press: root.searchButton1(CryptoInput.text)
+                    on_release: root.searchButton1(CryptoInput.text)
             
 
         RelativeLayout:
@@ -312,6 +313,27 @@ WindowManager:
             on_release:
                 root.candleChart1(coinid)
     
+<PricePred>:
+    GridLayout:
+        cols:1
+    
+    
+
+        GridLayout:
+            cols:2
+
+            Label:
+                text: "Coin" 
+
+            TextInput:
+                id: coinid
+                multiline: False
+            
+        
+        Button:
+            text: "Load"
+            on_release:
+                root.load_lstm(coinid)
 
 <AddRemove>:
 

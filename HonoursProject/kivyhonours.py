@@ -23,12 +23,18 @@ from apihonours import showGraph
 from apihonours import apiCall
 from apihonours import candleChart
 from apihonours import showGraphVol
-
+from lstm import LSTMFunc
 from APITESTER import apicall23
 from APITESTER import apicall_24_hour_percent
-
+import json
 
 coin = Coin()
+with open("values.txt")as f:
+    symbolNameConverter = json.load(f)
+symbols = []
+for k,v in symbolNameConverter.items():
+    symbols.append(v)
+print(symbols)
 def getItems(coin):
     zipp = zip(coin.nameList, coin.coinsOwned, coin.currencyList)
     items = [{"spalte1_SP":x,"spalte2_SP":str(y),"spalte3_SP":"£"+str(z)} for x,y,z in zipp]
@@ -129,47 +135,100 @@ class ThirdWindow(Screen):
 
         PopupWindow.open()
         #UPDATE
+    def show_popup_pricepred(self):
+        show2 = PricePred()
+        
+        PopupWindow = Popup(title="Price Prediction",content=show2, size_hint=(None,None),size=(400,400))
     
+        PopupWindow.open()
         
     
- 
+class PricePred(Screen):
+    def load_lstm(self,coin):
+        
+        try: 
+            coinNoSpace = coin.text.replace(" ","")
+            if self.doesFileExist(coinNoSpace):
+                LSTMFunc(coinNoSpace)
+            else:
+                apiCall(coinNoSpace)
+                LSTMFunc(coinNoSpace)
+                
+        except:
+            MainWindow.show_error("File Not Found")
+    @staticmethod
+    def doesFileExist(coin):
+        try:
+            with open(f"ApiCryptoData{coin}.csv") as f:
+                return True
+        except FileNotFoundError:
+            return False 
+            
+        
 
 
 class CandlePop(Screen):
+    
     def candleChart1(self,coin):
+        try:  
         
-        coinNoSpace = coin.text.replace(" ","")
+            coinNoSpace = coin.text.replace(" ","")
         
-        candleChart(coinNoSpace)
-        showGraphVol(coinNoSpace)
+            candleChart(coinNoSpace)
+            showGraphVol(coinNoSpace)
+        except:
+            MainWindow.show_error("File Not Found")
+   
         
     
 class ForthWindow(Screen):
     #Takes number of days and coin and loads graph based on input
     def load_historical_week(self,coin):
         try:
-            showGraph(7,coin)
-        except FileNotFoundError:
+            if coin.upper() not in symbols:
+                coin = symbolNameConverter[coin.lower()]
+                showGraph(7,coin)
+                
+        except:
             MainWindow.show_error("File Not Found")
             
     def load_historical_month(self,coin):
         try:
-            showGraph(31,coin)
-        except FileNotFoundError:
+            if coin.upper() not in symbols:
+                coin = symbolNameConverter[coin.lower()]
+                showGraph(31,coin)
+            else:
+                showGraph(365,coin.upper())
+        except:
             MainWindow.show_error("File Not Found")
     def load_historical_year(self,coin):
         try:
-            showGraph(365,coin)
-        except FileNotFoundError:
+            if coin.upper() not in symbols:
+                coin = symbolNameConverter[coin.lower()]
+                showGraph(365,coin)
+            else:
+                showGraph(365,coin.upper())
+        except :
             MainWindow.show_error("File Not Found")
         #### File Names ETH search Eth
     def apiCall1(self,coin):
-        apiCall(coin)
+        try:
+            if coin.upper() not in symbols:
+                coin = symbolNameConverter[coin.lower()]
+                apiCall(coin)
+            else:
+                apiCall(coin.upper())
+        except:
+            MainWindow.show_error("File Not Found")
+        
     
   
     #searches for button ID given in kivy file and replaced button text with the value of coin and % change over 24 hours
     def searchButton1(self,coin):
-        self.ids.btnb.text = str(apicall23(coin)) + "\n" + str(apicall_24_hour_percent(coin)) +"%"
+        try :
+            self.ids.btnb.text = str(apicall23(coin)) + "\n" + str(apicall_24_hour_percent(coin)) +"%"
+        except:
+            MainWindow.show_error("Incorrect input")
     def percentUpdate(self,coin):
         x = str(apicall_24_hour_percent(coin))
         return x

@@ -78,6 +78,15 @@ class Coin:
         
     except (ConnectionError, Timeout, TooManyRedirects) as e:
       print(e)
+  def makelocaldct(self):
+    a = self.data["data"]
+    symbolNameConverter={}
+    for i in a:
+      symbolNameConverter[i["name"].lower()] = i["symbol"]
+    with open("values.txt","w+")as f:
+      json.dump(symbolNameConverter,f)
+
+    
     
   def process(self):
     a = self.data["data"]
@@ -231,7 +240,8 @@ if __name__=="__main__":
   #ccc.updateCoins("Bitoin",0.01863129)
   
   ccc.saveCoins()
+  ccc.makelocaldct()
   #print(ccc.coins)
-  ccc.updateCoins1("Eth",20,"add")
+  
 
 
