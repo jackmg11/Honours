@@ -101,7 +101,7 @@ def LSTMFunc(coin):
     scaler_test = MinMaxScaler(feature_range=(0, 1))
     scaled_test = scaler_test.fit_transform(df_test)
 
-    def dataset_generator_lstm(dataset, look_back=5):
+    def dataset_generator_lstm(dataset, look_back=7):
         # A “lookback period” defines the window-size of how many
         # previous timesteps are used in order to predict
         # the subsequent timestep. 
@@ -199,7 +199,7 @@ def LSTMFunc(coin):
     # callbacks = [checkpoint]
 
 
-    history = regressor.fit(trainX, trainY, batch_size = 16, epochs = 600, verbose=1, shuffle=False, validation_data=(testX, testY), callbacks=callbacks)
+    history = regressor.fit(trainX, trainY, batch_size = 16, epochs = 100, verbose=1, shuffle=False, validation_data=(testX, testY), callbacks=callbacks)
 
     from tensorflow.keras.models import load_model
 
@@ -253,60 +253,60 @@ def LSTMFunc(coin):
 
     print('Test RMSE: %.3f' % rmse_lstm_test)
 
-    # With 2 Layers + Dropout + lookback=5 => I got - Test RMSE: 1666.162  => This seems best
+    
 
     rmse_lstm_train = math.sqrt(mean_squared_error(train_actual, predicted_btc_price_train_data))
 
     print('Test RMSE: %.3f' % rmse_lstm_train)
 
-    # With 2 Layers + Dropout + lookback=5 => I got - Test RMSE: 1047.916  => This seems best
+   
 
     testX
     testX.shape
 
-    lookback_period = 5
+    lookback_period = 7
 
     # That is the original Trading data ended on 30-Oct-2021, but now I am going to forecast for Future 5 days beyond 30-Oct-2021
 
-    testX_last_5_days = testX[testX.shape[0] - lookback_period :  ]
+    testX_last_7_days = testX[testX.shape[0] - lookback_period :  ]
 
-    testX_last_5_days.shape
+    testX_last_7_days.shape
 
 
 
-    testX_last_5_days
+    testX_last_7_days
 
-    predicted_5_days_forecast_price_test_x = []
+    predicted_7_days_forecast_price_test_x = []
 
-    for i in range(5):  
-        predicted_forecast_price_test_x = model_from_saved_checkpoint.predict(testX_last_5_days[i:i+1])
+    for i in range(7):  
+        predicted_forecast_price_test_x = model_from_saved_checkpoint.predict(testX_last_7_days[i:i+1])
     
         predicted_forecast_price_test_x = scaler_test.inverse_transform(predicted_forecast_price_test_x.reshape(-1, 1))
     # print(predicted_forecast_price_test_x)
-        predicted_5_days_forecast_price_test_x.append(predicted_forecast_price_test_x)
+        predicted_7_days_forecast_price_test_x.append(predicted_forecast_price_test_x)
     
-    print("Forecast for the next 5 Days Beyond the actual trading days ", np.array(predicted_5_days_forecast_price_test_x)) 
-    # That is the original Trading data ended on 30-Oct-2021, but now I am going to forecast beyond 30-Oct-2021
+    print("Forecast for the next 7 Days Beyond the actual trading days ", np.array(predicted_7_days_forecast_price_test_x)) 
+    
 
-    predicted_5_days_forecast_price_test_x = np.array(predicted_5_days_forecast_price_test_x)
+    predicted_7_days_forecast_price_test_x = np.array(predicted_7_days_forecast_price_test_x)
 
-    predicted_5_days_forecast_price_test_x.shape
+    predicted_7_days_forecast_price_test_x.shape
 
     predicted_btc_price_test_data.shape
 
     predicted_btc_price_test_data
 
-    predicted_5_days_forecast_price_test_x
+    predicted_7_days_forecast_price_test_x
 
-    predicted_5_days_forecast_price_test_x = predicted_5_days_forecast_price_test_x.flatten()
+    predicted_7_days_forecast_price_test_x = predicted_7_days_forecast_price_test_x.flatten()
 
-    predicted_5_days_forecast_price_test_x
+    predicted_7_days_forecast_price_test_x
 
     predicted_btc_price_test_data = predicted_btc_price_test_data.flatten()
 
     predicted_btc_price_test_data
 
-    predicted_btc_test_concatenated = np.concatenate((predicted_btc_price_test_data, predicted_5_days_forecast_price_test_x))
+    predicted_btc_test_concatenated = np.concatenate((predicted_btc_price_test_data, predicted_7_days_forecast_price_test_x))
 
     predicted_btc_test_concatenated
 
@@ -327,4 +327,5 @@ def LSTMFunc(coin):
 
 
 if __name__=="__main__":
+    
     LSTMFunc("XTZ")

@@ -26,15 +26,21 @@ from apihonours import showGraphVol
 from lstm import LSTMFunc
 from APITESTER import apicall23
 from APITESTER import apicall_24_hour_percent
+import threading
 import json
 
 coin = Coin()
 with open("values.txt")as f:
     symbolNameConverter = json.load(f)
 symbols = []
+names = []
+nameSymbolConverte = {}
 for k,v in symbolNameConverter.items():
     symbols.append(v)
-print(symbols)
+    names.append(k)
+    nameSymbolConverte[v] = k
+    
+#print(symbolNameConverter)
 def getItems(coin):
     zipp = zip(coin.nameList, coin.coinsOwned, coin.currencyList)
     items = [{"spalte1_SP":x,"spalte2_SP":str(y),"spalte3_SP":"£"+str(z)} for x,y,z in zipp]
@@ -149,10 +155,19 @@ class PricePred(Screen):
         try: 
             coinNoSpace = coin.text.replace(" ","")
             if self.doesFileExist(coinNoSpace):
-                LSTMFunc(coinNoSpace)
+                MainWindow.show_error("Incorrect input")
+                t1 = threading.Thread(target=LSTMFunc(coinNoSpace))
+                
+                
+                #LSTMFunc(coinNoSpace)
+                
+                t1.start()
+                
             else:
                 apiCall(coinNoSpace)
+                MainWindow.show_error("Incorrect input")
                 LSTMFunc(coinNoSpace)
+                
                 
         except:
             MainWindow.show_error("File Not Found")
@@ -186,9 +201,11 @@ class ForthWindow(Screen):
     def load_historical_week(self,coin):
         try:
             if coin.upper() not in symbols:
+               
                 coin = symbolNameConverter[coin.lower()]
                 showGraph(7,coin)
-                
+            else:
+                showGraph(7,coin.upper())
         except:
             MainWindow.show_error("File Not Found")
             
@@ -225,13 +242,21 @@ class ForthWindow(Screen):
   
     #searches for button ID given in kivy file and replaced button text with the value of coin and % change over 24 hours
     def searchButton1(self,coin):
-        try :
-            self.ids.btnb.text = str(apicall23(coin)) + "\n" + str(apicall_24_hour_percent(coin)) +"%"
+        try:
+            print(nameSymbolConverte)
+            if coin.upper() in symbols:
+                
+                coin = nameSymbolConverte[coin.upper()]
+                print(coin)
+            price = apicall23(coin)
+            percent24 = apicall_24_hour_percent(coin)         
+
+            self.ids.btnb.text = str(price) + "\n" + str(percent24) +"%"
+
+            #self.ids.btnb.text = str(apicall23(coin)) + "\n" + str(apicall_24_hour_percent(coin)) +"%"
         except:
             MainWindow.show_error("Incorrect input")
-    def percentUpdate(self,coin):
-        x = str(apicall_24_hour_percent(coin))
-        return x
+    
     
     
         

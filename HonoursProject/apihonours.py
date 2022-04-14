@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import requests
 import json 
 from datetime import datetime
-
+import threading 
 def Time_converter(time):
     time = datetime.utcfromtimestamp(time).strftime('%Y-%m-%d')
     return time
@@ -36,6 +36,20 @@ def loadData(file):
     
 #takes days and coin and returns graph of both
 def showGraph(days,coin): 
+    #vol days
+    """data2 = loadData(f"ApiCryptoData{coin.strip()}.csv")
+    data2["Date"]=data2["time"].apply(Time_converter)
+   
+   
+    data12 = data2.tail(days)
+    graph2 = data12[[("Date"),"volumeto"]]
+    graph2.plot(x="Date")
+    
+    plt.ticklabel_format(useOffset=False)
+  
+    """#plt.locator_params(axis="x",nbins=4)
+    
+    #price days
     data = loadData(f"ApiCryptoData{coin.strip()}.csv")
     data["Date"]=data["time"].apply(Time_converter)
    
@@ -46,8 +60,10 @@ def showGraph(days,coin):
   
     plt.locator_params(axis="x",nbins=4)
     plt.show()
+    
 
 def showGraphVol(coin): 
+    
     data = loadData(f"ApiCryptoData{coin.strip()}.csv")
     data["Date"]=data["time"].apply(Time_converter)
    
@@ -58,7 +74,6 @@ def showGraphVol(coin):
   
     plt.locator_params(axis="x",nbins=4)
     plt.show()
-
 
 
 """def showGraph1(date,coin): 
@@ -93,3 +108,7 @@ def candleChart(coin):
                     close=df['close'])])
 
     fig1.show()
+
+
+
+#showGraph(7,"Btc")

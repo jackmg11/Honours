@@ -87,7 +87,7 @@ class Coin:
       json.dump(symbolNameConverter,f)
 
     
-    
+
   def process(self):
     a = self.data["data"]
 
