@@ -26,8 +26,10 @@ from apihonours import showGraphVol
 from lstm import LSTMFunc
 from APITESTER import apicall23
 from APITESTER import apicall_24_hour_percent
+from sentiment import sentimentAverage
 import threading
 import json
+import apihonours
 
 coin = Coin()
 with open("values.txt")as f:
@@ -62,8 +64,12 @@ class MainWindow(Screen):
     
 class Table(BoxLayout):
     pass
+class Table2(BoxLayout):
+    pass
 class SecondWindow(Screen):
     coin123 = NumericProperty(coin.myTotal)
+    
+    
     #loads graph of total coins in piechart
     def load_chart(self):
         coin.graph()
@@ -74,7 +80,7 @@ class SecondWindow(Screen):
         coinTotal = str(coin.myTotal)
         print(coinTotal)
 
-        self.ids.total_display.text = coinTotal
+        self.ids.total_display.text = "£"+ coinTotal
        
 
 class AddRemove(Screen):
@@ -171,6 +177,37 @@ class PricePred(Screen):
                 
         except:
             MainWindow.show_error("File Not Found")
+    def portfoliopred(self,coins,amount):
+        
+        totalval =[]
+        for coin in coins:
+            
+            totalval.append(LSTMFunc(coin))
+        coinamount =[]
+        zipped = zip(totalval,amount)
+        for val,am in zipped:
+            coinamount.append(val*am)
+        zipped2 = zip(coinamount,coins)
+        totalcoins = {}
+        for x,y in zipped2:
+            totalcoins[y]=x
+        print(totalcoins)
+    def getcoinvalues(self):
+        with open("coins.txt","r") as f:
+            file = json.load(f)
+            lst1 =[]
+            lst2 =[]
+            for k,v in file.items():
+                lst1.append(symbolNameConverter[k.lower()])
+                lst2.append(v)
+        self.portfoliopred(lst1,lst2)
+                    
+                
+                
+                
+                
+             
+            
     @staticmethod
     def doesFileExist(coin):
         try:
@@ -180,7 +217,32 @@ class PricePred(Screen):
             return False 
             
         
-
+class portfoliopredpop(Screen):
+    def portfoliopred(self,coins,amount):
+        
+        totalval =[]
+        for coin in coins:
+            
+            totalval.append(LSTMFunc(coin))
+        coinamount =[]
+        zipped = zip(totalval,amount)
+        for val,am in zipped:
+            coinamount.append(val*am)
+        zipped2 = zip(coinamount,coins)
+        totalcoins = {}
+        for x,y in zipped2:
+            totalcoins[y]=x
+        print(totalcoins)
+    def getcoinvalues(self):
+        with open("coins.txt","r") as f:
+            file = json.load(f)
+            lst1 =[]
+            lst2 =[]
+            for k,v in file.items():
+                lst1.append(symbolNameConverter[k.lower()])
+                lst2.append(v)
+        self.portfoliopred(lst1,lst2)
+    
 
 class CandlePop(Screen):
     
@@ -197,17 +259,10 @@ class CandlePop(Screen):
         
     
 class ForthWindow(Screen):
-    #Takes number of days and coin and loads graph based on input
-    def load_historical_week(self,coin):
-        try:
-            if coin.upper() not in symbols:
-               
-                coin = symbolNameConverter[coin.lower()]
-                showGraph(7,coin)
-            else:
-                showGraph(7,coin.upper())
-        except:
-            MainWindow.show_error("File Not Found")
+    
+    def marketsent(self):
+        
+        self.ids.btnb2.text = sentimentAverage()
             
     def load_historical_month(self,coin):
         try:
@@ -238,7 +293,12 @@ class ForthWindow(Screen):
         except:
             MainWindow.show_error("File Not Found")
         
+    def showWindowNews(self):
+        show2 = popup6()
+        
+        PopupWindow = Popup(title="News",content=show2, size_hint=(None,None),size=(400,400))
     
+        PopupWindow.open()    
   
     #searches for button ID given in kivy file and replaced button text with the value of coin and % change over 24 hours
     def searchButton1(self,coin):
@@ -251,12 +311,17 @@ class ForthWindow(Screen):
             price = apicall23(coin)
             percent24 = apicall_24_hour_percent(coin)         
 
-            self.ids.btnb.text = str(price) + "\n" + str(percent24) +"%"
+            self.ids.btnb.text = "£"+ str(price) + "\n" + str(percent24) +"%"
 
             #self.ids.btnb.text = str(apicall23(coin)) + "\n" + str(apicall_24_hour_percent(coin)) +"%"
         except:
             MainWindow.show_error("Incorrect input")
+    def showportfoliopred(self):
+        show2 = portfoliopredpop()
+        
+        PopupWindow = Popup(title="News",content=show2, size_hint=(None,None),size=(400,400))
     
+        PopupWindow.open()   
     
     
         
@@ -266,13 +331,33 @@ class Fifthwindow(Screen):
         zipp = zip(coin.nameList, coin.coinsOwned, coin.currencyList)
         items = [{"spalte1_SP":x,"spalte2_SP":str(y),"spalte3_SP":"£"+str(z)} for x,y,z in zipp]
         return items
+   
+        
     
     def refresh_RV(self):
         self.ids.rv_id.data = self.getItems()
         self.ids.rv_id.refresh_from_data()
+    
         
     
-    
+class popup6(Screen):
+    def newslist(self):
+        lst1 =[]
+        lst2 = []
+        for k,v in apihonours.news().items():
+            lst1.append(k)
+            lst2.append(v)
+
+        zipp = zip(lst1,lst2)
+        items = [{"item1":x,"item2":y} for x,y in zipp]
+        print(zipp)
+        print(items)
+        return items  
+
+    def refresh_RV(self):
+        self.ids.rv_id1.data = self.newlist()
+        self.ids.rv_id1.refresh_from_data()
+
     
             
 
@@ -291,6 +376,9 @@ class RV(RecycleView):
     def __init__(self, **kwargs):
         super(RV, self).__init__(**kwargs)
         
+class RV1(RecycleView):
+    def __init__(self, **kwargs):
+        super(RV1, self).__init__(**kwargs)
     
 
 
@@ -324,3 +412,4 @@ class Crypto(App):
 
 if __name__ =="__main__":
     Crypto().run()
+    

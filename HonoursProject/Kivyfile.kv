@@ -70,7 +70,7 @@ WindowManager:
                 background_color: (0.0,0.0,0.0,1.0)
                 
             Button:
-                text: "Load Graph"  
+                text: "Allocation Breakdown"  
                 background_color: (0.0,0.0,0.0,1.0)
                 on_press: root.load_chart()
                 
@@ -175,12 +175,11 @@ WindowManager:
                     size_hint: None, None
                     size: 0.25 * root.width, 0.25 * root.height
                     pos: 0.00 * root.width, 0.00 * root.height
-                    text: 'Week'
+                    text: 'News'
                     group: 'geometry'
-                    on_release: root.load_historical_week(CryptoInput.text)
+                    on_release: root.showWindowNews()
 
         
-        # Create Toggle button 2
             RelativeLayout:
                 canvas:
                     Color:
@@ -188,12 +187,13 @@ WindowManager:
                     Rectangle:
                         size: root.width, root.height
                 ToggleButton:
+                    id: btnb2
                     size_hint: None, None
                     size: 0.25 * root.width, 0.25 * root.height
                     pos: 0.00 * root.width, 0.00 * root.height
-                    text: 'Month'
+                    text: 'Market Sentiment' 
                     group: 'geometry'
-                    on_release: root.load_historical_month(CryptoInput.text)
+                    on_release: root.marketsent()
             
 
             RelativeLayout:
@@ -268,8 +268,25 @@ WindowManager:
         id: SP3
         text: root.spalte3_SP    
   
+<Table2>:
+    name: "Table2"
+    orientation: 'horizontal'
+    spacing: 40
+    item1: 'item1'
+  
+    
+   
 
-<RV>:
+    Label:
+        text_size: root.width, None
+        size: self.texture_size
+        id: SP1
+        text: root.item1
+  
+   
+    
+
+
 
             
             
@@ -291,7 +308,22 @@ WindowManager:
                 height: self.minimum_height 
                 orientation: 'vertical'
             
-
+<popup6>:
+    name: "sixth"
+    orientation: "vertical"
+    on_pre_enter: self.refresh_RV()
+    BoxLayout: 
+        RecycleView:
+            id: rv_id1
+            data: root.newslist()
+            viewclass: 'Table2'   
+            RecycleBoxLayout:
+                default_size: None, dp(50)
+                default_size_hint: 1, None
+                size_hint_y: None  
+                width: self.minimum_width
+                height: self.minimum_height 
+                orientation: 'vertical'
                     
           
 <CandlePop>:
@@ -337,6 +369,10 @@ WindowManager:
             text: "Load"
             on_release:
                 root.load_lstm(coinid)
+        Button:
+            text: "Portfolio Predictor"
+            on_release:
+                root.getcoinvalues()
 
 <AddRemove>:
 

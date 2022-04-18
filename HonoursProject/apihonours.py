@@ -4,7 +4,11 @@ from matplotlib import pyplot as plt
 import requests
 import json 
 from datetime import datetime
-import threading 
+
+from requests import  Session
+from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+
+
 def Time_converter(time):
     time = datetime.utcfromtimestamp(time).strftime('%Y-%m-%d')
     return time
@@ -112,3 +116,22 @@ def candleChart(coin):
 
 
 #showGraph(7,"Btc")
+def news():
+    titleUrl = {}
+    url = f"https://min-api.cryptocompare.com/data/v2/news/?lang=EN"
+    a = requests.get(url)
+    data = json.loads(a.text)
+    for i in data["Data"]:
+        titleUrl[i["title"]]=i["url"]
+        #print(i["title"],i["url"])
+    print(titleUrl)
+    return titleUrl
+        
+        
+        
+    #return data["Data"]
+
+
+def trending():
+    pass
+

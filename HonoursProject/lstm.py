@@ -79,8 +79,8 @@ def LSTMFunc(coin):
 
     # Set Train data to be uplo ( Total data length - prediction_days )
     df_train= btc_closing_price_groupby_date[:len(btc_closing_price_groupby_date)-prediction_days].values.reshape(-1,1)
-
-
+    
+    print(df_train)
     # Set Test data to be the last prediction_days (or 60 days in this case)
     df_test= btc_closing_price_groupby_date[len(btc_closing_price_groupby_date)-prediction_days:].values.reshape(-1,1)
 
@@ -199,7 +199,7 @@ def LSTMFunc(coin):
     # callbacks = [checkpoint]
 
 
-    history = regressor.fit(trainX, trainY, batch_size = 16, epochs = 100, verbose=1, shuffle=False, validation_data=(testX, testY), callbacks=callbacks)
+    history = regressor.fit(trainX, trainY, batch_size = 8, epochs = 100, verbose=1, shuffle=False, validation_data=(testX, testY), callbacks=callbacks)
 
     from tensorflow.keras.models import load_model
 
@@ -266,7 +266,7 @@ def LSTMFunc(coin):
 
     lookback_period = 7
 
-    # That is the original Trading data ended on 30-Oct-2021, but now I am going to forecast for Future 5 days beyond 30-Oct-2021
+   
 
     testX_last_7_days = testX[testX.shape[0] - lookback_period :  ]
 
@@ -323,9 +323,11 @@ def LSTMFunc(coin):
     plt.show()
 
     predicted_btc_test_concatenated
+    
 
+    return predicted_7_days_forecast_price_test_x[-1]
 
-
+    
 if __name__=="__main__":
     
-    LSTMFunc("XTZ")
+    LSTMFunc("BTC")

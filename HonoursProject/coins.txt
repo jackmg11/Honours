@@ -1,1 +1,1 @@
-{"Bitcoin": 64.2, "Solana": 10.0, "Monero": 3.0, "Ethereum": 541.0}
+{"Bitcoin": 14.200000000000003, "Solana": 15.0, "Monero": 3.0, "Ethereum": 11.0}
