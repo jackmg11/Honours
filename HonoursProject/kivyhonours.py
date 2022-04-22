@@ -27,7 +27,7 @@ from lstm import LSTMFunc
 from APITESTER import apicall23
 from APITESTER import apicall_24_hour_percent
 from sentiment import sentimentAverage
-import threading
+
 import json
 import apihonours
 
@@ -162,12 +162,12 @@ class PricePred(Screen):
             coinNoSpace = coin.text.replace(" ","")
             if self.doesFileExist(coinNoSpace):
                 MainWindow.show_error("Incorrect input")
-                t1 = threading.Thread(target=LSTMFunc(coinNoSpace))
                 
                 
-                #LSTMFunc(coinNoSpace)
                 
-                t1.start()
+                LSTMFunc(coinNoSpace)
+                
+                
                 
             else:
                 apiCall(coinNoSpace)
@@ -247,14 +247,27 @@ class portfoliopredpop(Screen):
 class CandlePop(Screen):
     
     def candleChart1(self,coin):
-        try:  
-        
+        #try:
+            #print(coin.text)
             coinNoSpace = coin.text.replace(" ","")
+            if coinNoSpace.upper() not in symbols:
+                print(coinNoSpace)
+                coinNoSpace = symbolNameConverter[coinNoSpace.lower()]
+                print(coinNoSpace)
+                candleChart(coinNoSpace)
+                showGraphVol(coinNoSpace)
+                print(coinNoSpace)
+            else:
+                candleChart(coinNoSpace.upper())
+                showGraphVol(coinNoSpace.upper())
+                print(coinNoSpace)
+                
         
-            candleChart(coinNoSpace)
-            showGraphVol(coinNoSpace)
-        except:
-            MainWindow.show_error("File Not Found")
+                
+        #except:
+            #MainWindow.show_error("File Not Found")
+            
+        
    
         
     
@@ -274,14 +287,16 @@ class ForthWindow(Screen):
         except:
             MainWindow.show_error("File Not Found")
     def load_historical_year(self,coin):
-        try:
-            if coin.upper() not in symbols:
-                coin = symbolNameConverter[coin.lower()]
-                showGraph(365,coin)
-            else:
-                showGraph(365,coin.upper())
-        except :
-            MainWindow.show_error("File Not Found")
+        print(coin)
+        if coin.upper() not in symbols:
+            coin = symbolNameConverter[coin.lower()]
+            showGraph(365,coin)
+            print(coin)
+        else:
+            showGraph(365,coin.upper())
+            print(coin)
+        #except :
+            #MainWindow.show_error("File Not Found")
         #### File Names ETH search Eth
     def apiCall1(self,coin):
         try:

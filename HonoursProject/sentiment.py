@@ -57,4 +57,4 @@ def sentimentAverage():
         return "Slightly Negativity"
     else:
         return "Very Negative"
-#print(sentimentAverage())
+print(sentimentAverage())

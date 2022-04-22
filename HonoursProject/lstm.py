@@ -33,7 +33,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.layers import LSTM
-
+from sklearn.metrics import mean_absolute_error
 from itertools import cycle
 import plotly.offline as py
 import plotly.graph_objects as go
@@ -199,7 +199,7 @@ def LSTMFunc(coin):
     # callbacks = [checkpoint]
 
 
-    history = regressor.fit(trainX, trainY, batch_size = 8, epochs = 100, verbose=1, shuffle=False, validation_data=(testX, testY), callbacks=callbacks)
+    history = regressor.fit(trainX, trainY, batch_size = 16, epochs = 100, verbose=1, shuffle=False, validation_data=(testX, testY), callbacks=callbacks)
 
     from tensorflow.keras.models import load_model
 
@@ -257,8 +257,10 @@ def LSTMFunc(coin):
 
     rmse_lstm_train = math.sqrt(mean_squared_error(train_actual, predicted_btc_price_train_data))
 
-    print('Test RMSE: %.3f' % rmse_lstm_train)
+    print('Train RMSE: %.3f' % rmse_lstm_train)
 
+    #mape = mean_absolute_error((test_actual - predicted_btc_price_test_data / test_actual))*100
+    #print(mape)
    
 
     testX
@@ -326,6 +328,8 @@ def LSTMFunc(coin):
     
 
     return predicted_7_days_forecast_price_test_x[-1]
+
+    
 
     
 if __name__=="__main__":

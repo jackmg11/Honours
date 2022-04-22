@@ -133,16 +133,18 @@ WindowManager:
                 on_release: root.show_popup() 
             
             Button:
-                text: "4th window"
+                text:"Back"
+                background_color: (0.0,0.0,0.0,1.0)
+                on_release: app.root.current = "second"
+            
+            Button:
+                text: "News, Market Sentiment & More"
                 background_color: (0.0,0.0,0.0,1.0)
                 on_release: app.root.current ="fourth"
 
                 
 
-            Button:
-                text:"Back"
-                background_color: (0.0,0.0,0.0,1.0)
-                on_release: app.root.current = "second"
+            
                 
 
 <ForthWindow>:

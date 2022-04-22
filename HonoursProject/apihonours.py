@@ -134,4 +134,3 @@ def news():
 
 def trending():
     pass
-
