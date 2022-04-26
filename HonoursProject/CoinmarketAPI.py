@@ -49,4 +49,4 @@ def callAPI():
     return data["data"]
 
 
-print(search("BTC"))
+#print(search("BTC"))

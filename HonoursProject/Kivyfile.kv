@@ -209,9 +209,9 @@ WindowManager:
                     size: 0.25 * root.width, 0.25 * root.height
                     pos: 0.00 * root.width, 0.00 * root.height
                     
-                    text: 'Year'
+                    text: 'PortfolioPred'
                     group: 'geometry'
-                    on_release: root.load_historical_year(CryptoInput.text) 
+                    on_release: root.show_porfolio_pred()
 
             
         
@@ -286,11 +286,42 @@ WindowManager:
         text: root.item1
   
    
+<Table3>:
+    name: "Table3"
+    orientation: 'horizontal'
+    spacing: 40
+    item12: 'item12'
+    item22: 'item22'
+  
     
+   
+
+    Label:
+        
+        id: SP1
+        text: root.item12
+    Label:
+        
+        text : root.item22
+        id: SP2
 
 
-
-            
+<Portfolio_pred>:
+    name: "Portfolio_pred"
+    orientation: "vertical"
+    
+    BoxLayout: 
+        RecycleView:
+            id: rv_id3
+            data: root.getcoinvalues()
+            viewclass: 'Table3'   
+            RecycleBoxLayout:
+                default_size: None, dp(50)
+                default_size_hint: 1, None
+                size_hint_y: None  
+                width: self.minimum_width
+                height: self.minimum_height 
+                orientation: 'vertical'
             
            
 <FifthWindow>:
@@ -349,7 +380,8 @@ WindowManager:
             text: "Load"
             on_release:
                 root.candleChart1(coinid)
-    
+
+
 <PricePred>:
     GridLayout:
         cols:1
@@ -371,10 +403,9 @@ WindowManager:
             text: "Load"
             on_release:
                 root.load_lstm(coinid)
-        Button:
-            text: "Portfolio Predictor"
-            on_release:
-                root.getcoinvalues()
+        
+
+                
 
 <AddRemove>:
 

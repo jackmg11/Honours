@@ -1,3 +1,4 @@
+from mimetypes import init
 from tkinter import E
 from matplotlib.pyplot import show
 from coinmarketstuff import Coin
@@ -36,11 +37,11 @@ with open("values.txt")as f:
     symbolNameConverter = json.load(f)
 symbols = []
 names = []
-nameSymbolConverte = {}
+nameSymbolConverter = {}
 for k,v in symbolNameConverter.items():
     symbols.append(v)
     names.append(k)
-    nameSymbolConverte[v] = k
+    nameSymbolConverter[v] = k
     
 #print(symbolNameConverter)
 def getItems(coin):
@@ -61,8 +62,9 @@ class MainWindow(Screen):
         
         
             
-    
 class Table(BoxLayout):
+    pass    
+class Table3(BoxLayout):
     pass
 class Table2(BoxLayout):
     pass
@@ -128,14 +130,14 @@ class ThirdWindow(Screen):
     def show_popup(self):
         
         show = Fifthwindow()
-        popupWindow = Popup(title="Coins",content=show, size_hint=(None,None),size=(600,600))
+        popupWindow = Popup(title="Coins",content=show, size_hint=(0.85,0.85))
         
         popupWindow.open()
     
     def show_popup2(self):
         show2 = AddRemove()
 
-        PopupWindow = Popup(title="Update Coin Total",content=show2, size_hint=(None,None),size=(400,400))
+        PopupWindow = Popup(title="Update Coin Total",content=show2, size_hint=(0.85,0.85))
 
         PopupWindow.open()
         #UPDATE
@@ -143,17 +145,18 @@ class ThirdWindow(Screen):
     def show_popup_candle(self):
         show2 = CandlePop()
 
-        PopupWindow = Popup(title="Candle Chart",content=show2, size_hint=(None,None),size=(400,400))
+        PopupWindow = Popup(title="Candle Chart",content=show2, size_hint=(0.9,0.9))
 
         PopupWindow.open()
         #UPDATE
     def show_popup_pricepred(self):
         show2 = PricePred()
         
-        PopupWindow = Popup(title="Price Prediction",content=show2, size_hint=(None,None),size=(400,400))
+        PopupWindow = Popup(title="Price Prediction",content=show2, size_hint=(0.85,0.85))
     
         PopupWindow.open()
         
+
     
 class PricePred(Screen):
     def load_lstm(self,coin):
@@ -171,41 +174,16 @@ class PricePred(Screen):
                 
             else:
                 apiCall(coinNoSpace)
-                MainWindow.show_error("Incorrect input")
                 LSTMFunc(coinNoSpace)
                 
                 
         except:
             MainWindow.show_error("File Not Found")
-    def portfoliopred(self,coins,amount):
+   
         
-        totalval =[]
-        for coin in coins:
-            
-            totalval.append(LSTMFunc(coin))
-        coinamount =[]
-        zipped = zip(totalval,amount)
-        for val,am in zipped:
-            coinamount.append(val*am)
-        zipped2 = zip(coinamount,coins)
-        totalcoins = {}
-        for x,y in zipped2:
-            totalcoins[y]=x
-        print(totalcoins)
-    def getcoinvalues(self):
-        with open("coins.txt","r") as f:
-            file = json.load(f)
-            lst1 =[]
-            lst2 =[]
-            for k,v in file.items():
-                lst1.append(symbolNameConverter[k.lower()])
-                lst2.append(v)
-        self.portfoliopred(lst1,lst2)
-                    
-                
-                
-                
-                
+    
+   
+                          
              
             
     @staticmethod
@@ -217,7 +195,18 @@ class PricePred(Screen):
             return False 
             
         
-class portfoliopredpop(Screen):
+class Portfolio_pred(Screen):
+    
+    def getcoinvalues(self):
+        with open("coins.txt","r") as f:
+            file = json.load(f)
+            lst1 =[]
+            lst2 =[]
+            for k,v in file.items():
+                lst1.append(symbolNameConverter[k.lower()])
+                lst2.append(v)
+        return self.portfoliopred(lst1,lst2)
+        
     def portfoliopred(self,coins,amount):
         
         totalval =[]
@@ -232,16 +221,20 @@ class portfoliopredpop(Screen):
         totalcoins = {}
         for x,y in zipped2:
             totalcoins[y]=x
-        print(totalcoins)
-    def getcoinvalues(self):
-        with open("coins.txt","r") as f:
-            file = json.load(f)
-            lst1 =[]
-            lst2 =[]
-            for k,v in file.items():
-                lst1.append(symbolNameConverter[k.lower()])
-                lst2.append(v)
-        self.portfoliopred(lst1,lst2)
+        lst1 = []
+        lst2 =[]
+        for k,v in totalcoins.items():
+            lst1.append(k)
+            lst2.append(v)
+        zipp = zip(lst1,lst2)
+        items1 = [{"item12":str(x),"item22":str(y)} for x,y in zipp]
+        print(items1)
+        return items1
+        
+    def refresh_RV(self):
+        print("hello")
+        self.ids.rv_id3.data = self.getcoinvalues()
+        self.ids.rv_id3.refresh_from_data()
     
 
 class CandlePop(Screen):
@@ -253,14 +246,13 @@ class CandlePop(Screen):
             if coinNoSpace.upper() not in symbols:
                 print(coinNoSpace)
                 coinNoSpace = symbolNameConverter[coinNoSpace.lower()]
-                print(coinNoSpace)
+                
                 candleChart(coinNoSpace)
                 showGraphVol(coinNoSpace)
-                print(coinNoSpace)
+                
             else:
                 candleChart(coinNoSpace.upper())
                 showGraphVol(coinNoSpace.upper())
-                print(coinNoSpace)
                 
         
                 
@@ -277,24 +269,7 @@ class ForthWindow(Screen):
         
         self.ids.btnb2.text = sentimentAverage()
             
-    def load_historical_month(self,coin):
-        try:
-            if coin.upper() not in symbols:
-                coin = symbolNameConverter[coin.lower()]
-                showGraph(31,coin)
-            else:
-                showGraph(365,coin.upper())
-        except:
-            MainWindow.show_error("File Not Found")
-    def load_historical_year(self,coin):
-        print(coin)
-        if coin.upper() not in symbols:
-            coin = symbolNameConverter[coin.lower()]
-            showGraph(365,coin)
-            print(coin)
-        else:
-            showGraph(365,coin.upper())
-            print(coin)
+    
         #except :
             #MainWindow.show_error("File Not Found")
         #### File Names ETH search Eth
@@ -311,18 +286,18 @@ class ForthWindow(Screen):
     def showWindowNews(self):
         show2 = popup6()
         
-        PopupWindow = Popup(title="News",content=show2, size_hint=(None,None),size=(400,400))
+        PopupWindow = Popup(title="News",content=show2, size_hint=(0.85,0.85))
     
         PopupWindow.open()    
   
     #searches for button ID given in kivy file and replaced button text with the value of coin and % change over 24 hours
     def searchButton1(self,coin):
         try:
-            print(nameSymbolConverte)
+            print(nameSymbolConverter)
             if coin.upper() in symbols:
                 
-                coin = nameSymbolConverte[coin.upper()]
-                print(coin)
+                coin = nameSymbolConverter[coin.upper()]
+                #print(coin)
             price = apicall23(coin)
             percent24 = apicall_24_hour_percent(coin)         
 
@@ -331,20 +306,21 @@ class ForthWindow(Screen):
             #self.ids.btnb.text = str(apicall23(coin)) + "\n" + str(apicall_24_hour_percent(coin)) +"%"
         except:
             MainWindow.show_error("Incorrect input")
-    def showportfoliopred(self):
-        show2 = portfoliopredpop()
-        
-        PopupWindow = Popup(title="News",content=show2, size_hint=(None,None),size=(400,400))
-    
-        PopupWindow.open()   
     
     
-        
+    def show_porfolio_pred(self):
+
+        show2 = Portfolio_pred()
+
+        PopupWindow = Popup(title="Price Prediction",content=show2, size_hint=(0.9,0.9))
+
+        PopupWindow.open()      
+            
         
 class Fifthwindow(Screen):
     def getItems(self):
         zipp = zip(coin.nameList, coin.coinsOwned, coin.currencyList)
-        items = [{"spalte1_SP":x,"spalte2_SP":str(y),"spalte3_SP":"£"+str(z)} for x,y,z in zipp]
+        items = [{"spalte1_SP":x,"spalte2_SP":str(y),"spalte3_SP":"£"+str(round(z,2))} for x,y,z in zipp]
         return items
    
         
@@ -365,15 +341,16 @@ class popup6(Screen):
 
         zipp = zip(lst1,lst2)
         items = [{"item1":x,"item2":y} for x,y in zipp]
-        print(zipp)
-        print(items)
+        #print(zipp)
+        #print(items)
         return items  
 
     def refresh_RV(self):
         self.ids.rv_id1.data = self.newlist()
         self.ids.rv_id1.refresh_from_data()
 
-    
+
+
             
 
 
@@ -403,7 +380,6 @@ class RV1(RecycleView):
 
 
 kv = Builder.load_file("Kivyfile.kv")
-
 
 
 
